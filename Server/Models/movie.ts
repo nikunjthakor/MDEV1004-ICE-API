@@ -3,7 +3,7 @@
 import { Collection, Schema, model } from 'mongoose';
 
 // Movie interface 
-interface IMovie 
+export interface IMovie 
 {
     movieID: string,
     title: string,
