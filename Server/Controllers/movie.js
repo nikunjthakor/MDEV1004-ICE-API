@@ -9,7 +9,7 @@ const Util_1 = require("../Util");
 function DisplayMovieList(req, res, next) {
     movie_1.default.find({})
         .then((data) => {
-        res.status(200).json({ success: true, msg: "Movie List Retrived and Displayed", data: data });
+        res.status(200).json({ success: true, msg: "Movie List Retrived and Displayed", data: data, token: null });
     })
         .catch((err) => {
         console.error(err);
@@ -19,16 +19,16 @@ exports.DisplayMovieList = DisplayMovieList;
 function DisplayMovieById(req, res, next) {
     let id = req.params.id;
     if (id.length != 24) {
-        res.status(400).json({ success: false, msg: "A valid ID is required to retrive a movie", data: "" });
+        res.status(400).json({ success: false, msg: "A valid ID is required to retrive a movie", data: null, token: null });
     }
     else {
         movie_1.default.findById({ _id: id })
             .then((data) => {
             if (data) {
-                res.status(200).json({ success: true, msg: "One Movie Retrived and Displayed", data: data });
+                res.status(200).json({ success: true, msg: "One Movie Retrived and Displayed", data: data, token: null });
             }
             else {
-                res.status(404).json({ success: false, msg: "Movie not found", data: "" });
+                res.status(404).json({ success: false, msg: "Movie not found", data: null, token: null });
             }
         })
             .catch((err) => {
@@ -58,7 +58,7 @@ function AddMovie(req, res, next) {
     });
     movie_1.default.create(newmovie)
         .then(() => {
-        res.status(200).json({ success: true, msg: "New Movie added", data: newmovie });
+        res.status(200).json({ success: true, msg: "New Movie added", data: newmovie, token: null });
     })
         .catch((err) => {
         console.error(err);
@@ -68,7 +68,7 @@ exports.AddMovie = AddMovie;
 function UpdateMovie(req, res, next) {
     let id = req.params.id;
     if (id.length != 24) {
-        res.status(400).json({ success: false, msg: "A valid ID is required to update a movie", data: "" });
+        res.status(400).json({ success: false, msg: "A valid ID is required to update a movie", data: null, token: null });
     }
     else {
         let genres = (req.body.genres) ? (0, Util_1.SanitizeArray)(req.body.genres) : (0, Util_1.SanitizeArray)("");
@@ -92,7 +92,7 @@ function UpdateMovie(req, res, next) {
         });
         movie_1.default.updateOne({ _id: id }, movieToUpdate)
             .then(() => {
-            res.status(200).json({ success: true, msg: "Movie updated", data: movieToUpdate });
+            res.status(200).json({ success: true, msg: "Movie updated", data: movieToUpdate, token: null });
         })
             .catch((err) => {
             console.error(err);
@@ -103,12 +103,12 @@ exports.UpdateMovie = UpdateMovie;
 function DeleteMovie(req, res, next) {
     let id = req.params.id;
     if (id.length != 24) {
-        res.status(400).json({ success: false, msg: "A valid ID is required to delete a movie", data: "" });
+        res.status(400).json({ success: false, msg: "A valid ID is required to delete a movie", data: null, token: null });
     }
     else {
         movie_1.default.deleteOne({ _id: id })
             .then(() => {
-            res.status(200).json({ success: true, msg: "Movie deleted", data: id });
+            res.status(200).json({ success: true, msg: "Movie deleted", data: id, token: null });
         })
             .catch((err) => {
             console.error(err);

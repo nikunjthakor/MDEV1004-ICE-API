@@ -3,6 +3,7 @@ import passport from 'passport';
 import mongoose from 'mongoose';
 
 import User from '../Models/user';
+import { GenerateToken } from '../Util';
 
 /**
  * Processes the Registration Request
@@ -40,13 +41,13 @@ export function ProcessRegistration(req:Request, res:Response, next:NextFunction
             return res.status(400).json({success: false, msg: "ERROR: User not registered", data: null});
         }
 
-        return passport.authenticate('local')(req, res, () =>
-        {
-            return res.json({success: true, msg: "User Logged in successfully", data: newUser});
-        });
+        return res.json({success: true, msg: "User Registered successfully", data: newUser, token: null});
+
     });
 }
 
+
+//
 /**
  * Process the Login Request
  *
@@ -63,14 +64,14 @@ export function ProcessLogin(req:Request, res:Response, next:NextFunction): void
         if(err)
         {
             console.error(err);
-            return res.status(400).json({success: false, msg: "ERROR: Server Error", data: null});
+            return res.status(400).json({success: false, msg: "ERROR: Server Error", data: null, token: null});
         }
 
         //  login errors ?
         if(!user)
         {
             console.error("Login Error: User Credentials Error or User Not Found");
-            return res.status(400).json({success: false, msg: "ERROR: Login Error", data: null});
+            return res.status(400).json({success: false, msg: "ERROR: Login Error", data: null, token: null});
         }
 
         req.login(user, (err) =>
@@ -78,11 +79,14 @@ export function ProcessLogin(req:Request, res:Response, next:NextFunction): void
             if(err)
             {
                 console.error(err);
-                return res.status(400).json({success: false, msg: "ERROR: Database Error", data: null});
+                return res.status(400).json({success: false, msg: "ERROR: Database Error", data: null, token: null});
             }
 
-            return res.json({success: true, msg: "User Logged in successfully", data: user});
+            const authToken = GenerateToken(user);
+
+            return res.json({success: true, msg: "User Logged in successfully", data: user, token: authToken});
         });
+        return;
     })(req, res, next);
 }
 
