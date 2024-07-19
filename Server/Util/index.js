@@ -7,16 +7,12 @@ exports.GenerateToken = exports.SanitizeArray = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../Config/db"));
 function SanitizeArray(inputString) {
-    if (Array.isArray(inputString)) {
-        return inputString.map((value) => value.trim());
+    let unsanitizedArray = inputString.split(",");
+    let sanitizedArray = Array();
+    for (const unsanitizedString of unsanitizedArray) {
+        sanitizedArray.push(unsanitizedString.trim());
     }
-    else if (typeof inputString === 'string') {
-        return inputString.split(",").map((value) => value.trim());
-    }
-    else {
-        console.error("Invalid input type");
-        return [];
-    }
+    return sanitizedArray;
 }
 exports.SanitizeArray = SanitizeArray;
 function GenerateToken(user) {
