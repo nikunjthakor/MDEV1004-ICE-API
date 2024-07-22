@@ -11,15 +11,19 @@ import db from '../Config/db';
  */
 export function SanitizeArray(inputString: string): string[]
 {
-    let unsanitizedArray = inputString.split(",");
-    // Created empty Array 
-    let sanitizedArray = Array<string>();
-    // trim each string
-    for (const unsanitizedString of unsanitizedArray) 
-    {
-        sanitizedArray.push(unsanitizedString.trim());
-    }
-    return sanitizedArray;
+    if(Array.isArray(inputString)) 
+        {
+            return inputString.map((value) => value.trim());
+        }
+        else if (typeof inputString === 'string')
+        {
+            return inputString.split(",").map((value) => value.trim());
+        }
+        else 
+        {
+            console.error("Invalid input type");
+            return [];
+        }
 }
 
 /**
